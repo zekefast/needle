@@ -1,0 +1,86 @@
+Needle Dependency Injector for Ruby
+http://rubyforge.org/projects/needle
+
+[1.3.0] (24 Dec 2005)
+  * Fix for logger API change in Ruby 1.8.3 and later
+ 
+  * Fix to allow services defined in a parent container and invoked from a
+    child container to find services defined in the child [Ryan Platte]
+
+[1.2.1] 26 Jul 2005:
+  * Bug fixes
+
+  * Got rid of warnings caused by accessing Object#id
+
+[1.2] 18 Nov 2004:
+  * Parameterized services.
+
+  * Multiton services.
+
+  * Added Container#use, Container#use!, and Container#defaults for setting
+    default options for services.
+
+  * Added :log_for service, which is a parameterized version of the :logs
+    service.
+
+  * DefinitionContext now passes all unknown messages through to the
+    container.
+
+  * Updated manual and FAQ.
+
+  * Fixed bugs and documentation typos.
+
+[1.1] 11 Nov 2004:
+  * Needle::Registry instances may be nested (i.e., given a parent).
+
+  * Needle::Registry instances may be given names
+
+  * The implementing classes of namespaces, interceptors, and definition
+    contexts are now services themselves, allowing clients to override them.
+
+  * Added a chapter to the manual describing how to override the namespace,
+    interceptor, and definition context implementations.
+
+[1.0] 4 Nov 2004:
+  * Logging levels may be specified more flexibly and robustly.
+
+  * Added Container#require, to better support service libraries.
+
+  * Added DefinitionContext#namespace_define!. DefinitionContext#namespace! is
+    now an alias for that.
+
+  * FAQ and Users Manual are complete (first draft).
+
+[0.9] 28 Oct 2004:
+  * Registry.new! is now Registry.define!
+
+  * Added Registry.define as a class method.
+
+  * Registry#fullname always returns nil. ServicePoint#fullname and
+    Container#fullname no longer include the registry itself in the
+    path.
+
+[0.6] 21 Oct 2004:
+  * Added benchmarks.
+
+  * Removed Container#register!.
+
+  * Added Container#define and Container#define!, and changed semantics of
+    Registry#new!.
+
+  * Service constructor blocks may accept two parameters: the container, and
+    the service point itself.
+
+  * Container#namespace (and friends) no longer acts like "mkdir -p".
+
+  * Added QueryableMutex for detecting cycles in dependencies.
+
+  * Changed implementation of service models to use instantiation pipelines.
+
+  * Added many new service models (prototype_initialize, threaded,
+    singleton_deferred_initialize, etc.)
+
+  * Added Jim Weirich's "DI in Ruby" article to documentation.
+
+[0.5] 14 Oct 2004:
+  * First public release.

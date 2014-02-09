@@ -1,0 +1,1136 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Needle::Container</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Needle::Container</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/needle/container_rb.html">
+                lib/needle/container.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <p>
+The container is the heart of <a href="../Needle.html">Needle</a>&#8217;s
+model. Every <a href="Container.html">Container</a> instance is a miniature
+registry, and is really a namespace separate from every other <a
+href="Container.html">Container</a> instance. Service lookups inside of a
+container always look in <tt>self</tt> first, and if not found, they then
+look in their parent container, recursively.
+</p>
+<p>
+You will rarely need to instantiate a <a
+href="Container.html">Container</a> directly. Instead, use the <a
+href="Container.html#M000056">Container#namespace</a> method to create new
+containers.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000064">[]</a>&nbsp;&nbsp;
+      <a href="#M000052">builder</a>&nbsp;&nbsp;
+      <a href="#M000053">define</a>&nbsp;&nbsp;
+      <a href="#M000054">define!</a>&nbsp;&nbsp;
+      <a href="#M000050">descended_from?</a>&nbsp;&nbsp;
+      <a href="#M000062">find_definition</a>&nbsp;&nbsp;
+      <a href="#M000051">fullname</a>&nbsp;&nbsp;
+      <a href="#M000063">get</a>&nbsp;&nbsp;
+      <a href="#M000065">has_key?</a>&nbsp;&nbsp;
+      <a href="#M000060">intercept</a>&nbsp;&nbsp;
+      <a href="#M000067">keys</a>&nbsp;&nbsp;
+      <a href="#M000066">knows_key?</a>&nbsp;&nbsp;
+      <a href="#M000069">method_missing</a>&nbsp;&nbsp;
+      <a href="#M000056">namespace</a>&nbsp;&nbsp;
+      <a href="#M000058">namespace!</a>&nbsp;&nbsp;
+      <a href="#M000059">namespace_define</a>&nbsp;&nbsp;
+      <a href="#M000057">namespace_define!</a>&nbsp;&nbsp;
+      <a href="#M000048">new</a>&nbsp;&nbsp;
+      <a href="#M000061">pipeline</a>&nbsp;&nbsp;
+      <a href="#M000055">register</a>&nbsp;&nbsp;
+      <a href="#M000068">require</a>&nbsp;&nbsp;
+      <a href="#M000070">respond_to?</a>&nbsp;&nbsp;
+      <a href="#M000049">root</a>&nbsp;&nbsp;
+      <a href="#M000071">use</a>&nbsp;&nbsp;
+      <a href="#M000072">use!</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">defaults</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+A hash of default options to use when registering services. These defaults
+also apply to namespaces, so when specifying a new default service model
+(for instance) there may be unexpected side-effects with the namespaces
+that are created.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">name</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The name of this container. May be <tt>nil</tt>.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">parent</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The container that contains this container. This will be <tt>nil</tt> for
+the root of a hierarchy (see <a href="Registry.html">Registry</a>).
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000048" class="method-detail">
+        <a name="M000048"></a>
+
+        <div class="method-heading">
+          <a href="#M000048" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">( parent=nil, name=nil )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a new empty container with the given parent and name. If a parent is
+given, this container will inherit the defaults of the parent at the time
+the container was created.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000048-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000048-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/needle/container.rb, line 48</span>
+48:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>( <span class="ruby-identifier">parent</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">name</span>=<span class="ruby-keyword kw">nil</span> )
+49:       <span class="ruby-ivar">@root</span> = <span class="ruby-keyword kw">nil</span>
+50:       <span class="ruby-ivar">@builder</span> = <span class="ruby-keyword kw">nil</span>
+51: 
+52:       <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>
+53:       <span class="ruby-ivar">@parent</span> = <span class="ruby-identifier">parent</span>
+54:       <span class="ruby-ivar">@service_points</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>
+55: 
+56:       <span class="ruby-ivar">@defaults</span> = ( <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-value">? </span><span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">defaults</span>.<span class="ruby-identifier">dup</span> )
+57:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000064" class="method-detail">
+        <a name="M000064"></a>
+
+        <div class="method-heading">
+          <span class="method-name">[]</span><span class="method-args">( name, *args )</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Container.html#M000063">get</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000052" class="method-detail">
+        <a name="M000052"></a>
+
+        <div class="method-heading">
+          <a href="#M000052" class="method-signature">
+          <span class="method-name">builder</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="DefinitionContext.html">DefinitionContext</a> instance
+that can be used to &quot;build&quot; this container.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000052-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000052-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/needle/container.rb, line 87</span>
+87:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">builder</span>
+88:       <span class="ruby-ivar">@builder</span> <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">self</span>[ <span class="ruby-identifier">:definition_context_factory</span> ].<span class="ruby-identifier">new</span>( <span class="ruby-keyword kw">self</span> )
+89:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000053" class="method-detail">
+        <a name="M000053"></a>
+
+        <div class="method-heading">
+          <a href="#M000053" class="method-signature">
+          <span class="method-name">define</span><span class="method-args">() {|builder if block_given?| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+If a block is given, yields the container&#8217;s builder instance to the
+block. Otherwise, simply returns the builder instance.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.define do |b|
+    b.foo { Bar.new }
+    b.baz { Baz.new }
+    ...
+  end
+</pre>
+<p>
+Or:
+</p>
+<pre>
+  container.define.foo { Bar.new }
+  container.define.baz { Baz.new }
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000053-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000053-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 106</span>
+106:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">define</span>
+107:       <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">builder</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+108:       <span class="ruby-identifier">builder</span>
+109:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000054" class="method-detail">
+        <a name="M000054"></a>
+
+        <div class="method-heading">
+          <a href="#M000054" class="method-signature">
+          <span class="method-name">define!</span><span class="method-args">( &amp;block )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a new <a href="DefinitionContext.html">DefinitionContext</a> around
+the container, and then evaluate the block within the new context instance
+(via <tt>instance_eval</tt>).
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.define! do
+    calc( :model =&gt; :prototype ) { Calc.new( operations ) }
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000054-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000054-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 119</span>
+119:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">define!</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+120:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;block expected&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>
+121:       <span class="ruby-identifier">builder</span>.<span class="ruby-identifier">instance_eval</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+122:       <span class="ruby-keyword kw">self</span>
+123:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000050" class="method-detail">
+        <a name="M000050"></a>
+
+        <div class="method-heading">
+          <a href="#M000050" class="method-signature">
+          <span class="method-name">descended_from?</span><span class="method-args">( container )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns <tt>true</tt> if this container either is the given container or is
+descended from the given container, and <tt>false</tt> otherwise.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000050-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000050-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/needle/container.rb, line 70</span>
+70:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">descended_from?</span>( <span class="ruby-identifier">container</span> )
+71:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">container</span>
+72:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">parent</span>
+73:       <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">descended_from?</span> <span class="ruby-identifier">container</span>
+74:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000062" class="method-detail">
+        <a name="M000062"></a>
+
+        <div class="method-heading">
+          <a href="#M000062" class="method-signature">
+          <span class="method-name">find_definition</span><span class="method-args">( name )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Searches the current container and its ancestors for the named service. If
+found, the service point (the definition of that service) is returned,
+otherwise <tt>nil</tt> is returned.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000062-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000062-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 289</span>
+289:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_definition</span>( <span class="ruby-identifier">name</span> )
+290:       <span class="ruby-identifier">point</span> = <span class="ruby-ivar">@service_points</span>[ <span class="ruby-identifier">name</span> ]
+291:       <span class="ruby-identifier">point</span> = <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">find_definition</span>( <span class="ruby-identifier">name</span> ) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">point</span>
+292:       <span class="ruby-identifier">point</span>
+293:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000051" class="method-detail">
+        <a name="M000051"></a>
+
+        <div class="method-heading">
+          <a href="#M000051" class="method-signature">
+          <span class="method-name">fullname</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return the fully qualified name of this container, which is the
+container&#8217;s name and all parent&#8217;s names up to the root
+container, catenated together with dot characters, i.e.,
+&quot;one.two.three&quot;.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000051-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000051-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/needle/container.rb, line 79</span>
+79:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fullname</span>
+80:       <span class="ruby-identifier">parent_name</span> = ( <span class="ruby-identifier">parent</span> <span class="ruby-value">? </span><span class="ruby-identifier">parent</span>.<span class="ruby-identifier">fullname</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> )
+81:       <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@name</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">parent_name</span>
+82:       <span class="ruby-node">&quot;#{parent_name}.#{@name}&quot;</span>
+83:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000063" class="method-detail">
+        <a name="M000063"></a>
+
+        <div class="method-heading">
+          <a href="#M000063" class="method-signature">
+          <span class="method-name">get</span><span class="method-args">( name, *args )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Retrieves the named service, if it exists. Ancestors are searched if the
+service is not defined by the current container (see <a
+href="Container.html#M000062">find_definition</a>). If the named service
+does not exist, <a href="ServiceNotFound.html">ServiceNotFound</a> is
+raised.
+</p>
+<p>
+Note that this returns the instantiated service, not the service point.
+</p>
+<p>
+Also, if any pipeline element in the instantiation pipeline does not
+support extra parameters when extra parameters have been given, then an
+error will be raised.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000063-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000063-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 304</span>
+304:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get</span>( <span class="ruby-identifier">name</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> )
+305:       <span class="ruby-identifier">point</span> = <span class="ruby-identifier">find_definition</span>( <span class="ruby-identifier">name</span> )
+306:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ServiceNotFound</span>, <span class="ruby-node">&quot;#{fullname}.#{name}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">point</span>
+307: 
+308:       <span class="ruby-identifier">point</span>.<span class="ruby-identifier">instance</span>( <span class="ruby-keyword kw">self</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> )
+309:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000065" class="method-detail">
+        <a name="M000065"></a>
+
+        <div class="method-heading">
+          <a href="#M000065" class="method-signature">
+          <span class="method-name">has_key?</span><span class="method-args">( name )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns <tt>true</tt> if this container includes a service point with the
+given name. Returns <tt>false</tt> otherwise.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000065-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000065-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 315</span>
+315:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_key?</span>( <span class="ruby-identifier">name</span> )
+316:       <span class="ruby-ivar">@service_points</span>.<span class="ruby-identifier">has_key?</span>( <span class="ruby-identifier">name</span> )
+317:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000060" class="method-detail">
+        <a name="M000060"></a>
+
+        <div class="method-heading">
+          <a href="#M000060" class="method-signature">
+          <span class="method-name">intercept</span><span class="method-args">( name )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Describe a new interceptor to use that will intercept method calls on the
+named service. This method returns a new <a
+href="Interceptor.html">Interceptor</a> instance, which can be used
+directly to configure the behavior of the interceptor.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.intercept( :calc ).with { |c| c.logging_interceptor }
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000060-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000060-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 261</span>
+261:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">intercept</span>( <span class="ruby-identifier">name</span> )
+262:       <span class="ruby-identifier">point</span> = <span class="ruby-identifier">find_definition</span>( <span class="ruby-identifier">name</span> )
+263:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ServiceNotFound</span>, <span class="ruby-node">&quot;#{fullname}.#{name}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">point</span>
+264: 
+265:       <span class="ruby-identifier">interceptor</span> = <span class="ruby-keyword kw">self</span>[ <span class="ruby-identifier">:interceptor_impl_factory</span> ].<span class="ruby-identifier">new</span>
+266:       <span class="ruby-identifier">point</span>.<span class="ruby-identifier">interceptor</span> <span class="ruby-identifier">interceptor</span>
+267: 
+268:       <span class="ruby-identifier">interceptor</span>
+269:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000067" class="method-detail">
+        <a name="M000067"></a>
+
+        <div class="method-heading">
+          <a href="#M000067" class="method-signature">
+          <span class="method-name">keys</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Return an array of the names of all service points in this container.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000067-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000067-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 328</span>
+328:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>
+329:       <span class="ruby-ivar">@service_points</span>.<span class="ruby-identifier">keys</span>
+330:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000066" class="method-detail">
+        <a name="M000066"></a>
+
+        <div class="method-heading">
+          <a href="#M000066" class="method-signature">
+          <span class="method-name">knows_key?</span><span class="method-args">( name )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns <tt>true</tt> if this container <em>or any ancestor</em> includes a
+service point with the given name. Returns <tt>false</tt> otherwise.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000066-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000066-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 321</span>
+321:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">knows_key?</span>( <span class="ruby-identifier">name</span> )
+322:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">has_key?</span>( <span class="ruby-identifier">name</span> )
+323:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">knows_key?</span>( <span class="ruby-identifier">name</span> ) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>
+324:       <span class="ruby-keyword kw">false</span>
+325:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000069" class="method-detail">
+        <a name="M000069"></a>
+
+        <div class="method-heading">
+          <a href="#M000069" class="method-signature">
+          <span class="method-name">method_missing</span><span class="method-args">( sym, *args )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+As a convenience for accessing services, this delegates any message sent to
+the container (which has no parameters and no block) to <a
+href="Container.html">Container</a>#[]. Note that this incurs slightly more
+overhead than simply calling <a href="Container.html">Container</a>#[]
+directly, so if performance is an issue, you should avoid this approach.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.register( :add ) { Adder.new }
+  p container.add == container[:add] # =&gt; true
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000069-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000069-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 378</span>
+378:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>( <span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> )
+379:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">knows_key?</span>( <span class="ruby-identifier">sym</span> )
+380:         <span class="ruby-identifier">get</span>( <span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span> )
+381:       <span class="ruby-keyword kw">else</span>
+382:         <span class="ruby-keyword kw">super</span>
+383:       <span class="ruby-keyword kw">end</span>
+384:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000056" class="method-detail">
+        <a name="M000056"></a>
+
+        <div class="method-heading">
+          <a href="#M000056" class="method-signature">
+          <span class="method-name">namespace</span><span class="method-args">( name, opts={}, &amp;block )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a new namespace within the container, with the given name. If a
+block is provided, it will be invoked when the namespace is created, with
+the new namespace passed to it.
+</p>
+<p>
+For the curious, namespaces are simply services that are implemented by <a
+href="Container.html">Container</a>. The two statements are conceptually
+identical:
+</p>
+<pre>
+  container.namespace( :calc )
+  container.register( :calc ) { |c,p| Needle::Container.new( c, p.name ) }
+</pre>
+<p>
+Note that this means that namespaces may be singletons or prototypes, or
+have immediate or deferred instantiation, and so forth. (The default of
+immediate, singleton instantiation is sufficient for 99% of the things
+you&#8217;ll use namespaces for.)
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.namespace( :operations ) do |op|
+    op.register( :add ) { Adder.new }
+    ...
+  end
+
+  adder = container.calc.operations.add
+</pre>
+<p>
+<b>Note</b>: the block is not invoked until the namespace is created, which
+is not until it is first referenced. If you need the namespace to be
+created immediately, either use <a
+href="Container.html#M000059">namespace_define</a> or reference the
+namespace as soon as you&#8217;ve created it.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000056-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000056-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 174</span>
+174:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">namespace</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+175:       <span class="ruby-identifier">register</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> ) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span>,<span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+176:         <span class="ruby-identifier">ns</span> = <span class="ruby-keyword kw">self</span>[ <span class="ruby-identifier">:namespace_impl_factory</span> ].<span class="ruby-identifier">new</span>( <span class="ruby-identifier">c</span>, <span class="ruby-identifier">name</span> )
+177:         <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span> <span class="ruby-identifier">ns</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span>
+178:         <span class="ruby-identifier">ns</span>
+179:       <span class="ruby-keyword kw">end</span>
+180:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000058" class="method-detail">
+        <a name="M000058"></a>
+
+        <div class="method-heading">
+          <span class="method-name">namespace!</span><span class="method-args">( name, opts={}, &amp;block )</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Container.html#M000057">namespace_define!</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000059" class="method-detail">
+        <a name="M000059"></a>
+
+        <div class="method-heading">
+          <a href="#M000059" class="method-signature">
+          <span class="method-name">namespace_define</span><span class="method-args">( name, opts={}, &amp;block )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a new namespace within the container, with the given name. The block
+(which is required) will be passed to <a
+href="Container.html#M000053">Container#define</a> on the new namespace.
+</p>
+<p>
+For the curious, namespaces are simply services that are implemented by <a
+href="Container.html">Container</a>. The two statements are really
+identical:
+</p>
+<pre>
+  container.namespace( :calc )
+  container.register( :calc ) { |c,p| Needle::Container.new( c, p.name ) }
+</pre>
+<p>
+Note that this means that namespaces may be singletons or prototypes, or
+have immediate or deferred instantiation, and so forth. (The default of
+immediate, singleton instantiation is sufficient for 99% of the things
+you&#8217;ll use namespaces for.)
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.namespace_define( :operations ) do |b|
+    b.add { Adder.new }
+    ...
+  end
+
+  adder = container.calc.operations.add
+</pre>
+<p>
+<b>Note</b>: this method will immediately instantiate the new namespace,
+unlike <a href="Container.html#M000056">namespace</a>. If you want
+instantiation of the namespace to be deferred, either use a deferring
+service model (like <tt>:singleton_deferred</tt>) or create the namespace
+via <a href="Container.html#M000056">namespace</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000059-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000059-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 248</span>
+248:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">namespace_define</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+249:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;block expected&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>
+250:       <span class="ruby-identifier">namespace</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> ) { <span class="ruby-operator">|</span><span class="ruby-identifier">ns</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ns</span>.<span class="ruby-identifier">define</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> ) }
+251:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">name</span>]
+252:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000057" class="method-detail">
+        <a name="M000057"></a>
+
+        <div class="method-heading">
+          <a href="#M000057" class="method-signature">
+          <span class="method-name">namespace_define!</span><span class="method-args">( name, opts={}, &amp;block )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Create a new namespace within the container, with the given name. The block
+(which is required) will be passed to <a
+href="Container.html#M000053">Container#define</a>! on the new namespace.
+</p>
+<p>
+For the curious, namespaces are simply services that are implemented by <a
+href="Container.html">Container</a>. The two statements are really
+identical:
+</p>
+<pre>
+  container.namespace( :calc )
+  container.register( :calc ) { |c,p| Needle::Container.new( c, p.name ) }
+</pre>
+<p>
+Note that this means that namespaces may be singletons or prototypes, or
+have immediate or deferred instantiation, and so forth. (The default of
+immediate, singleton instantiation is sufficient for 99% of the things
+you&#8217;ll use namespaces for.)
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.namespace_define!( :operations ) do
+    add { Adder.new }
+    ...
+  end
+
+  adder = container.calc.operations.add
+</pre>
+<p>
+<b>Note</b>: this method will immediately instantiate the new namespace,
+unlike <a href="Container.html#M000056">namespace</a>. If you want
+instantiation of the namespace to be deferred, either use a deferring
+service model (like <tt>:singleton_deferred</tt>) or create the namespace
+via <a href="Container.html#M000056">namespace</a>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000057-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000057-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 211</span>
+211:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">namespace_define!</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+212:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;block expected&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block</span>
+213:       <span class="ruby-identifier">namespace</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> ) { <span class="ruby-operator">|</span><span class="ruby-identifier">ns</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ns</span>.<span class="ruby-identifier">define!</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> ) }
+214:       <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">name</span>]
+215:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000061" class="method-detail">
+        <a name="M000061"></a>
+
+        <div class="method-heading">
+          <a href="#M000061" class="method-signature">
+          <span class="method-name">pipeline</span><span class="method-args">( name )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the pipeline object for the named service, which allows clients to
+explicitly manipulate the service&#8217;s instantiation pipeline.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.pipeline( :calc ).
+    add( :initialize ).
+    add( :custom ) { |me,*args| me.succ.call( *args ) }
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000061-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000061-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 279</span>
+279:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pipeline</span>( <span class="ruby-identifier">name</span> )
+280:       <span class="ruby-identifier">point</span> = <span class="ruby-identifier">find_definition</span>( <span class="ruby-identifier">name</span> )
+281:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ServiceNotFound</span>, <span class="ruby-node">&quot;#{fullname}.#{name}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">point</span>
+282: 
+283:       <span class="ruby-identifier">point</span>.<span class="ruby-identifier">pipeline</span>
+284:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000055" class="method-detail">
+        <a name="M000055"></a>
+
+        <div class="method-heading">
+          <a href="#M000055" class="method-signature">
+          <span class="method-name">register</span><span class="method-args">( name, opts={}, &amp;callback )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Register the named service with the container. When the service is
+requested (with <a href="Container.html">Container</a>#[]), the associated
+callback will be used to construct it.
+</p>
+<p>
+This returns the registry that was used to register the service.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.register( :calc, :model=&gt;:prototype ) do |c|
+    Calc.new( c.operations )
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000055-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000055-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 136</span>
+136:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">register</span>( <span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span>={}, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">callback</span> )
+137:       <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;expect block&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">callback</span>
+138: 
+139:       <span class="ruby-identifier">name</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">intern</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">is_a?</span>( <span class="ruby-constant">Symbol</span> )
+140:       <span class="ruby-ivar">@service_points</span>[ <span class="ruby-identifier">name</span> ] =
+141:         <span class="ruby-constant">ServicePoint</span>.<span class="ruby-identifier">new</span>( <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">name</span>, <span class="ruby-ivar">@defaults</span>.<span class="ruby-identifier">merge</span>( <span class="ruby-identifier">opts</span> ), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">callback</span> )
+142: 
+143:       <span class="ruby-keyword kw">self</span>
+144:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000068" class="method-detail">
+        <a name="M000068"></a>
+
+        <div class="method-heading">
+          <a href="#M000068" class="method-signature">
+          <span class="method-name">require</span><span class="method-args">( file, target_name, registration_method=:register_services )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Require the given file, and then invoke the given registration method on
+the target module. The container will be passed as the sole parameter to
+the registration method. This allows you to easily decentralize the
+definition of services.
+</p>
+<p>
+Usage:
+</p>
+<pre>
+  container.require( &quot;app/services&quot;, &quot;App::Services&quot; )
+
+  # in app/services.rb:
+
+  module App
+    module Services
+
+      def register_services( container )
+        ...
+      end
+      module_function :register_services
+
+    end
+  end
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000068-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000068-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 353</span>
+353:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">require</span>( <span class="ruby-identifier">file</span>, <span class="ruby-identifier">target_name</span>, <span class="ruby-identifier">registration_method</span>=<span class="ruby-identifier">:register_services</span> )
+354:       <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">require</span> <span class="ruby-identifier">file</span>
+355: 
+356:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">target_name</span>.<span class="ruby-identifier">is_a?</span>( <span class="ruby-constant">Module</span> )
+357:         <span class="ruby-identifier">target</span> = <span class="ruby-identifier">target_name</span>
+358:       <span class="ruby-keyword kw">else</span>
+359:         <span class="ruby-identifier">target</span> = <span class="ruby-constant">Object</span>
+360:         <span class="ruby-identifier">target_name</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">split</span>( <span class="ruby-regexp re">/::/</span> ).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
+361:           <span class="ruby-identifier">target</span> = <span class="ruby-identifier">target</span>.<span class="ruby-identifier">const_get</span>( <span class="ruby-identifier">element</span> )
+362:         <span class="ruby-keyword kw">end</span>
+363:       <span class="ruby-keyword kw">end</span>
+364: 
+365:       <span class="ruby-identifier">target</span>.<span class="ruby-identifier">__send__</span>( <span class="ruby-identifier">registration_method</span>, <span class="ruby-keyword kw">self</span> )
+366:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000070" class="method-detail">
+        <a name="M000070"></a>
+
+        <div class="method-heading">
+          <a href="#M000070" class="method-signature">
+          <span class="method-name">respond_to?</span><span class="method-args">( sym )</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns true if this container responds to the given message, or if it
+explicitly contains a service with the given name (see <a
+href="Container.html#M000065">has_key?</a>). In this case, <a
+href="Container.html#M000065">has_key?</a> is used instead of <a
+href="Container.html#M000066">knows_key?</a> so that subcontainers may be
+used as proper hashes by their parents.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000070-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000070-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 390</span>
+390:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">respond_to?</span>( <span class="ruby-identifier">sym</span> )
+391:       <span class="ruby-identifier">has_key?</span>( <span class="ruby-identifier">sym</span> ) <span class="ruby-operator">||</span> <span class="ruby-keyword kw">super</span>
+392:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000049" class="method-detail">
+        <a name="M000049"></a>
+
+        <div class="method-heading">
+          <a href="#M000049" class="method-signature">
+          <span class="method-name">root</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the root of the current hierarchy. If the container is the root,
+returns self, otherwise calls <a
+href="Container.html#M000049">Container#root</a> on its parent. The value
+is cached for future reference.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000049-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000049-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/needle/container.rb, line 62</span>
+62:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">root</span>
+63:       <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@root</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@root</span>
+64:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">nil?</span>
+65:       <span class="ruby-ivar">@root</span> = <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">root</span>
+66:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000071" class="method-detail">
+        <a name="M000071"></a>
+
+        <div class="method-heading">
+          <a href="#M000071" class="method-signature">
+          <span class="method-name">use</span><span class="method-args">( opts ) {|self| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Specifies a set of default options to use temporarily. The options are
+merged with the current set of defaults for the container. The original
+options are returned, and may be restored by invoking <a
+href="Container.html#M000071">use</a> again with the hash that is returned.
+If a block is given, the registry will be yielded to it and the options
+automatically restored when the block returns.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000071-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000071-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 400</span>
+400:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use</span>( <span class="ruby-identifier">opts</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> ) <span class="ruby-comment cmt"># :yield: self</span>
+401:       <span class="ruby-identifier">use!</span> <span class="ruby-ivar">@defaults</span>.<span class="ruby-identifier">merge</span>( <span class="ruby-identifier">opts</span> ), <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+402:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000072" class="method-detail">
+        <a name="M000072"></a>
+
+        <div class="method-heading">
+          <a href="#M000072" class="method-signature">
+          <span class="method-name">use!</span><span class="method-args">( opts ) {|self| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Specifies a set of default options to use temporarily. The original options
+are returned. This differs from <a href="Container.html#M000071">use</a> in
+that it will completely replace the original options, instead of merging
+the parameters with the originals.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000072-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000072-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/needle/container.rb, line 408</span>
+408:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">use!</span>( <span class="ruby-identifier">opts</span> )
+409:       <span class="ruby-identifier">original</span> = <span class="ruby-ivar">@defaults</span>
+410:       <span class="ruby-ivar">@defaults</span> = <span class="ruby-identifier">opts</span>
+411: 
+412:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+413:         <span class="ruby-keyword kw">begin</span>
+414:           <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span>
+415:         <span class="ruby-keyword kw">ensure</span>
+416:           <span class="ruby-identifier">use!</span> <span class="ruby-identifier">original</span>
+417:         <span class="ruby-keyword kw">end</span>
+418:       <span class="ruby-keyword kw">end</span>
+419: 
+420:       <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">original</span>
+421:     <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

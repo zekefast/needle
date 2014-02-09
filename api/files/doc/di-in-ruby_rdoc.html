@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: di-in-ruby.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>di-in-ruby.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>doc/di-in-ruby.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Sat Dec 24 08:09:06 MST 2005</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Dependency Injection in Ruby</h1>
+<p>
+By Jim Weirich, slightly adapted for <a
+href="../../classes/Needle.html">Needle</a> (original article at <a
+href="http://onestepback.org/index.cgi/Tech/Ruby/DependencyInjectionInRuby.rdoc">onestepback.org/index.cgi/Tech/Ruby/DependencyInjectionInRuby.rdoc</a>)
+</p>
+<p>
+<em>(The API described in the original version of this article inspired the
+creation of the <a href="../../classes/Needle.html">Needle</a> framework.
+This article has been modified slightly so that the DI examples use <a
+href="../../classes/Needle.html">Needle</a>, instead of the framework Jim
+originally presented. This has proven to be a very minor modification,
+since the two syntaxes are nearly identical. &#8212; Jamis Buck
+(jamis@37signals.com))</em>
+</p>
+<p>
+<em>This article is modified and distributed under the terms of the
+Creative Commons Attribution-NonCommercial 1.0 license (<a
+href="http://creativecommons.org/licenses/by-nc/1.0">creativecommons.org/licenses/by-nc/1.0</a>).</em>
+</p>
+<h2>What is Dependency Injection?</h2>
+<p>
+Consider the problem of putting together a moderately complex OO program.
+Typical OO programs create a bunch of objects, wire them together in
+interesting ways and then let the objects run. It is the first two steps,
+creating and wiring, that are addressed by Dependency Injection (DI).
+</p>
+<p>
+By the way, another term for dependency injection is Inversion of Control
+(IOC). Unfortunately, so many things in computer science are called
+inversion of control that the phrase does not evoke the right connotations
+with me, so I tend to avoid it. But Inversion of Control is the older term
+for this pattern so you will see it in many places.
+</p>
+<h2>A Moderately Complex Example</h2>
+<p>
+One of the problems with explaining Dependency Injection is that DI only
+becomes really useful in larger projects. Using a simple example to explain
+DI leaves the listener thinking &quot;But I can do that easily by (<em>fill
+in the blank</em>)&quot;. So my example is going to be a bit more complex,
+but hopefully not so large that the reader is unable to understand it.
+</p>
+<p>
+Imagine you have a webapp that tracks the prices of stocks over time. The
+application is nicely partitioned into different modules that each handle a
+portion of the job. A <tt>StockQuotes</tt> module talks to a remote web
+service to pull down the current values of the stocks you are tracking. A
+<tt>Database</tt> module records the stock values over time. Because this
+data is highly competitive, you require a login to use the system and thus
+have an <tt>Authentication</tt> module to handle validation of user names
+and password. In addition to these &quot;main&quot; modules, there are a
+number of additional utility modules used by multiple modules:
+<tt>ErrorHandler</tt> to standardize the handling and reporting of error
+messages and <tt>Logger</tt> to provide a standard way of logging
+messsages.
+</p>
+<p>
+A fully wired system might look something like this:
+</p>
+<p>
+<img src="images/di_classdiagram.jpg">
+</p>
+<h2>Building it Old Style!</h2>
+<p>
+In the bad, old days, we would just put the logic of building the web app
+directly into its initialize method. It might look something like
+this&#8230;
+</p>
+<pre>
+  class WebApp
+    def initialize
+      @quotes = StockQuotes.new
+      @authenticator = Authenticator.new
+      @database = Database.new
+      @logger = Logger.new
+      @error_handler = ErrorHandler.new
+    end
+    # ...
+  end
+</pre>
+<p>
+That handles building the WebApp well enough, but what about the
+subordinate modules. How does the <tt>StockQuotes</tt> module find out
+about the logger and error handler, or how does the <tt>Authenticator</tt>
+find the database and logger?
+</p>
+<p>
+We could rewrite <tt>WebApp#initialize</tt> to create everything in the
+right order and then pass the logger and error handler to
+<tt>StockQuotes</tt>. But that makes the web app rather dependent on
+details of the <tt>StockQuotes</tt> module. Currently the database module
+is created after the quote module, but suppose a change in
+<tt>StockQuotes</tt> causes it to need the database. That would require the
+WebApp to be aware of the change, rearrange the order of creation so that
+the database is created before the stock quotes module and finally make the
+database available to the quote service. Yuck!
+</p>
+<p>
+Even worse, the WebApp knows the <em>concrete</em> name of every module it
+uses. If I wanted to create an instance of the WebApp for testing, I might
+want to provide a mock quote service so that I can control the quotes used
+in testing. Or I might want a mock database for testing. All of these
+choices are difficult because WebApp knows the class name of all its
+subordinates.
+</p>
+<h2>Enter the Service Locator</h2>
+<p>
+We would like to remove the explicit reference to class names in WebApp,
+but still allow it to locate the services it needs. The <em>Service
+Locator</em> pattern was designed to address this problem.
+</p>
+<p>
+With Service Locator, we place references to services in one container and
+then pass that container to the modules that need to locate those services.
+</p>
+<pre>
+  def create_application
+    locator = {}
+    locator[:logger] = Logger.new
+    locator[:error_handler] = ErrorHandler.new(locator)
+    locator[:quotes] = StockQuotes.new(locator)
+    locator[:database] = Database.new(locator)
+    locator[:authenticator] = Authenticator.new(locator)
+    locator[:webapp] = WebApp.new(locator)
+  end
+</pre>
+<p>
+The initialize function for a service just uses the locator to find the
+services. Here is how <tt>StockQuotes</tt> might look&#8230;
+</p>
+<pre>
+  class StockQuotes
+    def initialize(locator)
+      @error_handler = locator[:error_handler]
+      @logger = locator[:logger]
+    end
+    # ...
+  end
+</pre>
+<p>
+Not bad. Now no service is aware of the exact class used for the other
+services. We can reconfigure the system easily by editted the
+<tt>create_application</tt> method.
+</p>
+<p>
+We use the Service Locator pattern (and variations) at work in our Java
+system.
+</p>
+<h2>External Configuration</h2>
+<p>
+Although we built the service locator in Ruby code, it would not be
+difficult to specify the locator as a configuration file. A simple Ruby
+method could read the file, instantiate the objects and populate a hash
+table. This might allow non-programmers to tweak a configuration to their
+liking.
+</p>
+<h2>More Goodness</h2>
+<p>
+Another neat thing about the locator is that we can use it to configure
+data as well as modules. Suppose we wanted to specify the file to be used
+as the log file. We might modify the <tt>create_application</tt> method to
+include the following:
+</p>
+<pre>
+  locator[:log_file_name] = &quot;webapp.log&quot;
+  locator[:logger] = Logger.new(locator)
+</pre>
+<p>
+And <tt>Logger</tt> would have to know that the log file was identified by
+<tt>:log_file_name</tt> in the locator. The <tt>Database</tt> module is
+another likely candidate for locator based information (e.g. DB user name
+and password, DB host name).
+</p>
+<h2>But &#8230;</h2>
+<p>
+As good as the Service Locator pattern is, there are still some negatives.
+Every class that uses the locator needs to be written expecting a locator
+as an argument to <tt>initialize</tt> method. This is not a natural idiom
+for Ruby programmer. In the absence of Service Locators, I would expect
+that the <tt>Logger</tt> class would be written like this &#8230;
+</p>
+<pre>
+  class Logger
+    def initialize(log_filename)
+      # ...
+    end
+    # ...
+  end
+</pre>
+<p>
+which would make it unusable in a system that depended upon service
+locators.
+</p>
+<p>
+Another downside is that all modules that use the locator must agree on the
+names of the services. For example, if MyLogger expects its file name to be
+under <tt>:log_filename</tt> and <tt>YourLogger</tt> expects to find its
+filename under <tt>:log_file</tt> then the two loggers are not plug
+replaceable.
+</p>
+<p>
+Also, suppose both <tt>StackQuotes</tt> and <tt>Database</tt> found their
+loggers using <tt>:logger</tt>, but we want to give them separate logger
+instances for some reason. The explicit dependence on the name of the
+logger service makes this a bit difficult.
+</p>
+<p>
+And finally, the service locator did not solve the problem of creation
+order. The database is still created after the stock quotes module, causing
+problems if the stocks quotes module were modified to use the database.
+</p>
+<p>
+None of the problems are show stoppers and there are workarounds for each,
+but it does make us wonder if there is a more general solution.
+</p>
+<h2>Finally, Dependency Injection</h2>
+<p>
+Dependency Injection is much like using service locators in that we
+identify the services by name. The big difference is that dependency
+injectors also take the responsibility of creating the service objects and
+making sure the dependent services are provided as needed.
+</p>
+<p>
+This means that the services can be written in complete ignorance of
+dependency injection framework. All they need to do is make sure that they
+can be told about the services they need, either through parameters to a
+constructor, or through some kind of setter.
+</p>
+<p>
+It also means that dependency injectors are a bit more complicated than
+service locators, since they also handle the creation of the services as
+well.
+</p>
+<h2>Dependency Injection in Action</h2>
+<p>
+How does dependency injection work? Generally, you create a DI container
+that is configured to know how to create the various services. Then you
+just ask for a service by name, and the container will create the serice
+(if needed) and give it to you.
+</p>
+<p>
+For example, configuring a logger service is as easy as &#8230;
+</p>
+<pre>
+   registry = Needle::Registry.new
+   registry.register(:logger) { Logger.new )
+</pre>
+<p>
+This says that the logger service is named <tt>:logger</tt>. The first time
+a logger service is requested, the block supplied to register will be
+called and a logger object will be created. Subsequent requests for a
+logger will return the already created logger.
+</p>
+<p>
+To get a logger service, all you need to do is ask:
+</p>
+<pre>
+   logger = registry.logger
+</pre>
+<table>
+<tr><td valign="top"><b>Note</b>:</td><td>In my examples, Service Locators were hash based, so using [] to access the
+services seems like a natural choice. For dependency injection containers,
+I chose to use a message-like syntax to access services (e.g.
+registry.logger). Either notation can be used for either service locators
+or dependency injection containers. In fact, the <a
+href="../../classes/Needle.html">Needle</a> dependency injection framework
+supports both selecter messages and hash-like indexing (registry[:logger]).
+
+</td></tr>
+</table>
+<p>
+If a logger requires a parameter, then you can easily handle that in the
+registration block.
+</p>
+<pre>
+  registry.register(:logger) { Logger.new(&quot;logfile.log&quot;) }
+</pre>
+<p>
+If you would rather have the logger get its log filename from the
+container, you can do this &#8230;
+</p>
+<pre>
+  registry.register(:logger) { |c| Logger.new(c.log_filename) }
+</pre>
+<p>
+And then somewhere else you can specify the log name &#8230;
+</p>
+<pre>
+  registry.register(:log_filename) { &quot;logfile.log&quot; }
+</pre>
+<h2>Configuring the WebApp with Dependency Injection</h2>
+<p>
+Now that we&#8217;ve seen some DI in action, let&#8217;s try it on our web
+app &#8230;
+</p>
+<pre>
+  def create_application
+    registry = Needle::Registry.new
+    registry.register(:logfilename) { &quot;logfile.log&quot; }
+    registry.register(:db_user) { &quot;jim&quot; }
+    registry.register(:db_password) { &quot;secret&quot; }
+    registry.register(:dbi_string) { &quot;DBI:Pg:example_data&quot; }
+
+    registry.register(:app) do |c|
+      app = WebApp.new(c.quotes, c.authenticator, c.database)
+      app.logger = c.logger
+      app.set_error_handler c.error_handler
+      app
+    end
+
+    registry.register(:quotes) { |c|
+      StockQuotes.new(c.error_handler, c.logger)
+    }
+
+    registry.register(:authenticator) { |c|
+      Authenticator.new(c.database, c.logger, c.error_handler)
+    }
+
+    registry.register(:database) { |c|
+      DBI.connect(c.dbi_string, c.db_user, c.db_password)
+    }
+
+    registry.register(:logger) { |c| Logger.new(c.logfilename) }
+    registry.register(:error_handler) do |c|
+      errh = ErrorHandler.new
+      errh.logger = c.logger
+      errh
+    end
+
+    registry.app
+  end
+</pre>
+<p>
+As you can see, it is a bit more complicated than the service locator. The
+main reason for the complexity is that we have moved the creation logic out
+of the services and into the DI container. What we have gained is the
+ability to inject dependencies into any object without having to make
+special code changes to support it.
+</p>
+<p>
+Just a few closing notes:
+</p>
+<ul>
+<li>Both constructor injection (<tt>StockQuotes</tt>) and setter injection
+(<tt>ErrorHandler</tt>) or a combination of both (<tt>WebApp</tt>) can be
+supported with this framework.
+
+</li>
+<li>We can even handle cases where the creation method is not named
+&quot;<tt>new</tt>&quot; (DBI).
+
+</li>
+<li>If a poorly written service didn&#8217;t provide a way to inject the
+services it depends upon, we <em>could</em> use
+<tt>instance_variable_set</tt> to force a dependent service into place.
+Obviously, this would be less than desireable.
+
+</li>
+<li>The order of the registration doesn&#8217;t matter, since no service is
+created until everything is registered. If the <tt>StockQuotes</tt> module
+suddenly starts needing a database connection, no problem. We just add a
+reference to a database service in the creation code for
+<tt>StockQuotes</tt> and we are done. The DI framework worries about making
+sure the database is <em>created</em> before anything that needs it.
+
+</li>
+<li>The container doesn&#8217;t have to be configured in one place. For
+example, we could move the first four register calls to a separate file
+that would allow the log file and database information to be modified
+independently of the rest.
+
+</li>
+<li>There still needs to be agreement about service names, but now only the
+container knows about them. The individual services don&#8217;t care.
+
+</li>
+<li>Since the DI container is responsible for all the service names and service
+creation, it is easy to intercept a service and wrap an AOP-like wrapper
+around a it.
+
+</li>
+<li>Just like the service locator, a DI container could be configured through a
+configuration file. The configuration would be more complex (because the DI
+container is more complex), but still quite doable. Another idea is to use
+Ruby as Domain Specific Language for DI container configuration.
+
+</li>
+</ul>
+<h2>Summary</h2>
+<p>
+Both the Service Locator and Dependency Injection patterns are quite
+useful, but each has different tradeoffs between flexibility and
+complexity. Understand the differences and you will have all you need to
+choose the proper idiom for any given circumstance.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

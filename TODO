@@ -1,0 +1,13 @@
+Allow services and namespaces to be unregistered
+Make loading cheaper by separating load dependencies
+
+==============================================================================
+FEATURE IDEAS FOR VERSION 2.0
+(the following features must wait until 2.0+ due to incompatible API changes)
+==============================================================================
+
+Instead of having the blocks take two parameters (c and p), accept a single parameter (context) that encapsulates both c and p:
+
+  registry.register( :foo, :model => :multiton ) do |ctx,name|
+    Printer.new( ctx[:log, ctx.point], name )
+  end
