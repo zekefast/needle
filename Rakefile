@@ -77,8 +77,9 @@ file "doc/manual-html/index.html" => [ "doc/manual/manual.yml" ] do
 end
 
 Rake::TestTask.new do |t|
-  t.test_files = [ "test/ALL-TESTS.rb" ]
-  t.verbose = true
+  t.libs << "test"
+  t.test_files = FileList["test/**/tc_*.rb"]
+  t.verbose    = true
 end
 
 desc "Prepackage warnings and reminders"
