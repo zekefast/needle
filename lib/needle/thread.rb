@@ -23,69 +23,29 @@ module Needle
   # cycles in the dependency graph of services.
   class QueryableMutex < Mutex
 
-    # Create a new unlocked QueryableMutex.
-    def initialize
-      super
-      @locking_thread = nil
-    end
-
     # Checks to see if the current thread has the mutex locked, and if it
     # does, raises an exception. Otherwise, locks the mutex and sets the
     # locking thread to Thread.current.
     def lock
-      if @locking_thread == Thread.current
-        raise ThreadError,
-          "an attempt was made to reacquire an existing lock " +
-          "(this could happen if you have a circular dependency on a service)"
-      end
+      super
 
-      while (Thread.critical = true; @locked)
-        @waiting.push Thread.current
-        Thread.stop
-      end
-      @locked = true
-      @locking_thread = Thread.current
-      Thread.critical = false
       self
+    rescue ThreadError
+      raise ThreadError,
+        "an attempt was made to reacquire an existing lock " +
+        "(this could happen if you have a circular dependency on a service)"
     end
 
-    # Attempts to acquire the lock. Returns +true+ if the lock was acquired,
-    # and +false+ if the mutex was already locked.
-    def try_lock
-      result = false
-      Thread.critical = true
-      unless @locked
-        @locked = true
-        result = true
-        @locking_thread = Thread.current
-      end
-      Thread.critical = false
-      result
-    end
-    
     # Unlocks the mutex and sets the locking thread to +nil+.
     def unlock
-      return unless @locked
-      Thread.critical = true
-      @locked = false
-      begin
-        t = @waiting.shift
-        t.wakeup if t
-      rescue ThreadError
-        retry
-      end
-      @locking_thread = nil
-      Thread.critical = false
-      begin
-        t.run if t
-      rescue ThreadError
-      end
+      super
+
       self
     end
 
     # Return +true+ if the current thread has locked this mutex.
     def self_locked?
-      @locking_thread == Thread.current
+      owned?
     end
 
   end
