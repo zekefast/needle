@@ -135,7 +135,7 @@ module Needle
         super
       else
         msg, progname = args
-        
+
         # check for API change in 1.8.3 and later
         msg, progname = progname, msg if respond_to?(:formatter=)
 
@@ -145,7 +145,7 @@ module Needle
           :msg => msg,
           :progname => progname
         }
-        
+
         if @needs_caller_info
           stack = caller
           stack.shift while stack.first =~ /\blogger\.rb/

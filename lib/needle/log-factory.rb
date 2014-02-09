@@ -58,7 +58,7 @@ module Needle
                       :default_message_format, :default_level, :levels ]
 
     VALID_LEVEL_OPTIONS = [ :level, :date_format, :message_format ]
-                      
+
     # Create a new LogFactory using the given initialization parameters.
     # The valid options are:
     #
@@ -119,7 +119,7 @@ module Needle
         end
 
         bad = value.keys - VALID_LEVEL_OPTIONS
-        raise ArgumentError, 
+        raise ArgumentError,
           "invalid log level option(s) #{bad.inspect}" unless bad.empty?
 
         value[ :level ] = LEVEL_TRANSLATOR[ value[:level].to_s.upcase ]
