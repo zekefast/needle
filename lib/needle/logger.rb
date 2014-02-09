@@ -14,6 +14,7 @@
 # =============================================================================
 #++
 
+require 'monitor'
 require 'logger'
 require 'strscan'
 require 'needle/errors'
@@ -24,6 +25,7 @@ module Needle
   # provides the additional functionality of a fully-customizable message
   # format, whereas the original only provided a customizable date format.
   class Logger < ::Logger
+    include MonitorMixin
 
     # The brief name of this logger (derived from #progname).
     attr_reader :name
@@ -63,22 +65,19 @@ module Needle
     # Changes the device that the given logger writes to, to be the given
     # device. Does so in a thread-safe manner.
     def write_to( device, shift_age = 0, shift_size = 1048576 )
-      saved_critical = Thread.critical
-      Thread.critical = true
-
-      if device
-        if device.respond_to?( :write ) && device.respond_to?( :close )
-          @logdev = device
-        else
-          @logdev = Logger::LogDevice.new( device,
-            :shift_age => shift_age, 
-            :shift_size => shift_size )
+      self.synchronize do
+        if device
+          if device.respond_to?( :write ) && device.respond_to?( :close )
+            @logdev = device
+          else
+            @logdev = Logger::LogDevice.new( device,
+              :shift_age => shift_age,
+              :shift_size => shift_size )
+          end
         end
-      end
 
-      device
-    ensure
-      Thread.critical = saved_critical
+        device
+      end
     end
 
     # Set the message format string to the given string. This also pre-parses
