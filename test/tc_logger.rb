@@ -88,19 +88,19 @@ class TC_Logger < Test::Unit::TestCase
   def test_log_config_via_yaml
     require 'yaml'
     config = YAML.load( <<-EOF )
-      ---
-      filename: ./somewhere.log
-      roll-age: 5
-      roll-size: 10241024
-      default-date-format: "%Y-%m-%d %H:%M:%S"
-      default-message-format: "[%d] %C - %m"
-      default-level: WARN
-      levels:
-        test.*: INFO
-        verbose.*:
-          level: WARN
-          date-format: "%Y-%m-%d"
-          message-format: "%C - %m"
+---
+filename: ./somewhere.log
+roll-age: 5
+roll-size: 10241024
+default-date-format: "%Y-%m-%d %H:%M:%S"
+default-message-format: "[%d] %C - %m"
+default-level: WARN
+levels:
+  test.*: INFO
+  verbose.*:
+    level: WARN
+    date-format: "%Y-%m-%d"
+    message-format: "%C - %m"
     EOF
     assert_nothing_raised do
       Needle::LogFactory.new config
