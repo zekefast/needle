@@ -16,10 +16,11 @@ Gem::Specification.new do |s|
    s.rdoc_options << '--title' << 'Needle -- Dependency Injection for Ruby' << 
     '--main' << 'doc/README'
 
-   s.test_suite_file = 'test/ALL-TESTS.rb'
+   s.test_file = 'test/ALL-TESTS.rb'
 
    s.author = "Jamis Buck"
    s.email = "jamis@37signals.com"
    s.homepage = "http://needle.rubyforge.org"
 
+   s.add_development_dependency("rdoc")
 end

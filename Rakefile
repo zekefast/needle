@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'rake'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
 require 'rake/contrib/sshpublisher'
 
 require "./lib/needle/version"
@@ -25,8 +25,6 @@ PACKAGE_FILES = FileList.new do |fl|
   fl.include SOURCE_FILES
   fl.exclude( /\bCVS\b/ )
 end
-
-Gem.manage_gems
 
 def can_require( file )
   begin
