@@ -14,13 +14,12 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require "test_helper"
 
-require 'needle'
 require 'needle/interceptor'
 require 'needle/pipeline/interceptor'
 require 'needle/service-point'
-require 'test/unit'
+
 
 class TC_ServicePoint < Test::Unit::TestCase
 

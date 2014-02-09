@@ -14,11 +14,11 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require 'ostruct'
+require "test_helper"
 
 require 'needle/interceptor-chain'
-require 'test/unit'
-require 'ostruct'
+
 
 class TC_InterceptorChainElement < Test::Unit::TestCase
 

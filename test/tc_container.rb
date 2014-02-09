@@ -14,9 +14,7 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
-
-require 'test/unit'
+require "test_helper"
 
 require 'needle/container'
 require 'needle/definition-context'

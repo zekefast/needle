@@ -14,10 +14,10 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require "test_helper"
 
 require 'needle/interceptor'
-require 'test/unit'
+
 
 class TC_Interceptor < Test::Unit::TestCase
 

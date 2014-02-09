@@ -14,11 +14,8 @@
 # =============================================================================
 #++
 
-$:.unshift "../../lib"
+require "test_helper"
 
-require "needle"
-require "test/unit"
-require File.join( File.dirname( __FILE__ ), "model_test" )
 
 class TC_Model_Threaded < Test::Unit::TestCase
   include ModelTest

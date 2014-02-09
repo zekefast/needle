@@ -15,7 +15,9 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+test_dir = File.expand_path(File.dirname(__FILE__))
+$LOAD_PATH << test_dir unless $LOAD_PATH.include?(test_dir)
+require "test_helper"
 
 Dir.chdir File.dirname(__FILE__)
 Dir["**/tc_*.rb"].each { |file| load file }

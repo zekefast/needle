@@ -14,11 +14,10 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require "test_helper"
 
 require 'needle/definition-context'
-require 'needle/registry'
-require 'test/unit'
+
 
 class TC_DefinitionContext < Test::Unit::TestCase
 

@@ -14,11 +14,11 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require 'stringio'
+require "test_helper"
 
 require 'needle/log-factory'
-require 'test/unit'
-require 'stringio'
+
 
 class TC_Logger < Test::Unit::TestCase
 

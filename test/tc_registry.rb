@@ -14,10 +14,8 @@
 # =============================================================================
 #++
 
-$:.unshift "../lib"
+require "test_helper"
 
-require 'needle/registry'
-require 'test/unit'
 
 class TC_Registry < Test::Unit::TestCase
 

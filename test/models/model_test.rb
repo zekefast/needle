@@ -14,10 +14,8 @@
 # =============================================================================
 #++
 
-$:.unshift "../../lib"
+require "test_helper"
 
-require "needle"
-require "test/unit"
 
 class ModelTest_MockService
   attr_reader :init_result
