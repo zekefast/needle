@@ -25,5 +25,5 @@ class TC_Model_Prototype_Deferred < Test::Unit::TestCase
   assert_prototype
   assert_deferred
   assert_no_init
-  
+
 end

@@ -74,7 +74,7 @@ module ModelTest
         @registry[ :test ].init_result
         @registry[ :test ].init_result
         @registry[ :test ].init_result
-        assert_equal 1, @count 
+        assert_equal 1, @count
       end
 
       define_method( :test_multiplicity_multithread ) do
@@ -83,14 +83,14 @@ module ModelTest
         threads << Thread.new { @registry[ :test ].init_result }
         threads << Thread.new { @registry[ :test ].init_result }
         threads.each { |t| t.join }
-        assert_equal 3, @count 
+        assert_equal 3, @count
       end
     end
 
     def assert_immediate
       define_method( :test_laziness ) do
         @registry[ :test ]
-        assert_equal 1, @count 
+        assert_equal 1, @count
       end
     end
 
@@ -137,7 +137,7 @@ module ModelTest
   def setup
     @count = 0
     @registry = Needle::Registry.new do |r|
-      r.register :test, :model => self.class.model do 
+      r.register :test, :model => self.class.model do
         @count += 1
         ModelTest_MockService.new
       end

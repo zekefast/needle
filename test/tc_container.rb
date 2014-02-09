@@ -27,6 +27,7 @@ require 'needle/log-factory'
 require 'needle/logging-interceptor'
 require 'needle/pipeline/interceptor'
 
+
 class TC_Container < Test::Unit::TestCase
 
   class CustomContainer < Needle::Container
@@ -333,7 +334,7 @@ class TC_Container < Test::Unit::TestCase
     container = new_container
     container.register( :service_models, :pipeline=>[] ) { Hash[ :singleton => [] ] }
     container.require( "services", "A::B::C" )
-    
+
     assert_not_nil container[:foo]
     assert_not_nil container[:foo][:bar]
   end
@@ -342,7 +343,7 @@ class TC_Container < Test::Unit::TestCase
     container = new_container
     container.register( :service_models , :pipeline=>[] ) { Hash[ :singleton => [] ] }
     container.require( "services", "A::B::C", :register_other_services )
-    
+
     assert_not_nil container[:blah]
     assert_not_nil container[:blah][:baz]
   end

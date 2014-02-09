@@ -25,5 +25,5 @@ class TC_Model_Prototype_Initialize < Test::Unit::TestCase
   assert_prototype
   assert_immediate
   assert_init
-  
+
 end

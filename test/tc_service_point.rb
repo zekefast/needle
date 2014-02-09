@@ -182,7 +182,7 @@ class TC_ServicePoint < Test::Unit::TestCase
       events << "third"
       ch.process_next ctx
     end
-        
+
     obj2 = reg.foo
     obj2.length
     assert_equal [ "first", "second", "third" ], events

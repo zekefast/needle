@@ -63,7 +63,7 @@ class TC_DefinitionContext < Test::Unit::TestCase
 
   def test_reference_missing_empty
     assert_nothing_raised do
-      @ctx.hello 
+      @ctx.hello
     end
     assert_equal :get, @container.events[0][:name]
     assert_equal [ :hello ], @container.events[0][:args]
