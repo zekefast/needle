@@ -111,7 +111,7 @@ module ModelTest
     end
 
     def assert_init
-      if instance_methods.include?( "extra_setup" )
+      if instance_methods.include?(:extra_setup)
         save_setup = instance_method( :extra_setup )
       end
 

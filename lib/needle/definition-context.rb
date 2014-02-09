@@ -29,9 +29,29 @@ module Needle
     ( private_instance_methods +
       protected_instance_methods +
       public_instance_methods -
-      [ "instance_eval", "object_id", "__id__", "__send__", "initialize",
-        "remove_const", "method_missing", "method", "class", "inspect", "to_s",
-        "instance_variables", "block_given?" ]
+      %w[
+        !
+        !=
+        ==
+        __id__
+        __send__
+        equal?
+        instance_eval
+        instance_exec
+        method_missing
+        singleton_method_added
+        singleton_method_removed
+        singleton_method_undefined
+        object_id
+        initialize
+        remove_const
+        method
+        class
+        inspect
+        to_s
+        instance_variables
+        block_given?
+      ].map(&:to_sym)
     ).
     each { |m| undef_method m }
 
