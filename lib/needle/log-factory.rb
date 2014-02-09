@@ -139,23 +139,19 @@ module Needle
     # Changes the device that the loggers write to. Every log that was created
     # by this log factory will be changed to use the given device.
     def write_to( device, shift_age = 0, shift_size = 1048576 )
-      saved_critical = Thread.critical
-      Thread.critical = true
+      Thread.exclusive do
+        @device.close if @device unless [ $stdout, $stderr ].include?( @device )
+        if device.respond_to?( :write ) && device.respond_to?( :close )
+          @device = device
+        else
+          @device = Logger::LogDevice.new( device.to_str,
+            :shift_age => shift_age,
+            :shift_size => shift_size )
+        end
 
-      @device.close if @device unless [ $stdout, $stderr ].include?( @device )
-      if device.respond_to?( :write ) && device.respond_to?( :close )
-        @device = device
-      else
-        @device = Logger::LogDevice.new( device.to_str,
-          :shift_age => shift_age, 
-          :shift_size => shift_size )
+        @loggers.each_value { |logger| logger.write_to( @device ) }
+        device
       end
-
-      @loggers.each_value { |logger| logger.write_to( @device ) }
-      device
-
-    ensure
-      Thread.critical = saved_critical
     end
 
     # Searches for a level definition hash that matches the given log
