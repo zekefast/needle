@@ -119,7 +119,7 @@ module Needle
         end
       end
 
-      @chain.call( actual_container, self, *args )
+      @chain.method(:call).call( actual_container, self, *args )
     end
 
   end
