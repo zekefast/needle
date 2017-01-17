@@ -41,6 +41,9 @@ module Needle
       "UNKNOWN" => Logger::UNKNOWN
     }
 
+    # GOTCHA: Assume that Ruby's require guarantee to loads file only once.
+    EXCLUSIVE_MUTEX = Mutex.new
+
     # The default date format string to use when logging.
     attr_reader :default_date_format
 
@@ -139,7 +142,7 @@ module Needle
     # Changes the device that the loggers write to. Every log that was created
     # by this log factory will be changed to use the given device.
     def write_to( device, shift_age = 0, shift_size = 1048576 )
-      Thread.exclusive do
+      EXCLUSIVE_MUTEX.synchronize do
         @device.close if @device unless [ $stdout, $stderr ].include?( @device )
         if device.respond_to?( :write ) && device.respond_to?( :close )
           @device = device
