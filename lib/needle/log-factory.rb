@@ -201,7 +201,7 @@ module Needle
 
         level = LEVEL_TRANSLATOR[ level.to_s.upcase ] || level
 
-        logger = Needle::Logger.new( @device )
+        logger = Needle::Logger.new( @device, progname: name )
         logger.level = level if level
         logger.progname = name
         logger.datetime_format = date_format if date_format
