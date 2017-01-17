@@ -6,9 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    json (1.8.1)
-    rdoc (4.1.1)
-      json (~> 1.4)
+    rdoc (5.0.0)
 
 PLATFORMS
   ruby
@@ -16,3 +14,6 @@ PLATFORMS
 DEPENDENCIES
   needle!
   rdoc
+
+BUNDLED WITH
+   1.13.7
